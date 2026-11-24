@@ -1,0 +1,158 @@
+/* Клон игры про динозаврика из Google Chrome.
+ * Вёрстка повторяет offline-страницу Chromium (BSD-3-Clause). */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: #fff;
+  color: #535353;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Ноночная тема: Chromium просто инвертирует всю страницу. */
+html.inverted {
+  background: #000;
+  filter: invert(100%);
+}
+
+/* Статичный динозавр рисуется на canvas, этот элемент нужен движку. */
+.icon {
+  display: none;
+}
+
+#offline-resources {
+  display: none;
+}
+
+/* Сцена игры. */
+.interstitial-wrapper {
+  position: relative;
+  margin: 0 auto;
+  max-width: 600px;
+  padding-top: 100px;
+  height: 190px;
+}
+
+.runner-container {
+  height: 150px;
+  max-width: 600px;
+  overflow: hidden;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 44px;
+  z-index: 2;
+  touch-action: none;
+}
+
+.runner-canvas {
+  height: 150px;
+  max-width: 600px;
+  opacity: 1;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  touch-action: none;
+}
+
+/* Прозрачный слой для тапов на мобильных. */
+.controller {
+  background: rgba(247, 247, 247, .1);
+  height: 100vh;
+  height: 100dvh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  width: 100dvw;
+  z-index: 1;
+}
+
+.controller.hidden {
+  display: none;
+}
+
+/* Подсказка по управлению. */
+.hint {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 210px;
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #9b9b9b;
+  letter-spacing: .01em;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Полноэкранный режим, в который Chromium переходит после старта. */
+.arcade-mode,
+.arcade-mode .runner-container,
+.arcade-mode .runner-canvas {
+  image-rendering: pixelated;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.arcade-mode .interstitial-wrapper {
+  height: 100vh;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.arcade-mode .runner-container {
+  left: 0;
+  margin: auto;
+  right: 0;
+  transform-origin: top center;
+  transition: transform 250ms cubic-bezier(0.4, 0, 1, 1) 400ms;
+  z-index: 2;
+}
+
+body.arcade-mode .hint {
+  display: none;
+}
+
+@media (max-width: 420px) {
+  .interstitial-wrapper {
+    width: 100%;
+    padding-top: 88px;
+    height: 180px;
+  }
+
+  .runner-container {
+    top: 28px;
+  }
+
+  .hint {
+    top: 190px;
+    font-size: 11px;
+    padding: 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arcade-mode .runner-container {
+    transition: none;
+  }
+}
