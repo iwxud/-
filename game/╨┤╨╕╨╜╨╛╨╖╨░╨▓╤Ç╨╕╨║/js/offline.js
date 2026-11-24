@@ -1493,7 +1493,11 @@ function Obstacle(canvasCtx, type, spriteImgPos, dimensions,
   this.size = getRandomNum(1, Obstacle.MAX_OBSTACLE_LENGTH);
   this.dimensions = dimensions;
   this.remove = false;
-  this.xPos = dimensions.WIDTH + (opt_xOffset || 0);
+  // BUGFIX: obstacles must spawn just outside the *current* canvas width.
+  // Using the logical default (600) made them freeze on wide screens,
+  // because checkForCollision() offsets by the same constant and the
+  // obstacle then never enters the collision zone.
+  this.xPos = this.dimensions.WIDTH + (opt_xOffset || 0);
   this.yPos = 0;
   this.width = 0;
   this.collisionBoxes = [];
